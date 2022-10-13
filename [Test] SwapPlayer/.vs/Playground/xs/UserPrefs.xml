@@ -1,0 +1,25 @@
+﻿<Properties StartupConfiguration="{99E9C9AD-937D-E4A9-DF50-AE34478454AD}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Player/IMovable.cs">
+    <Files>
+      <File FileName="Assets/Player/IMovable.cs" Line="7" Column="28" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="Playground" expanded="True">
+            <Node name="Assets" expanded="True" selected="True">
+              <Node name="Player" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="aadd616c-996b-4f5a-bf38-14723f68828e" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
