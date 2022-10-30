@@ -7,7 +7,9 @@ public class InventoryMock : MonoBehaviour
     [SerializeField]
     private Item replica;
     [SerializeField]
-    private Inventory inventory;
+    private ArrayInventory inventory;
+    [SerializeField]
+    private float _delayTime = 2;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,25 +19,50 @@ public class InventoryMock : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        StartCoroutine(Move());
+    }
+
+    IEnumerator Move(){
         if (Input.GetKeyDown("w"))
         {
-            inventory.SelectSlot(UIMovementEnum.UP);
+            StartCoroutine(MoveUP());
         }
         if (Input.GetKeyDown("s"))
         {
-            inventory.SelectSlot(UIMovementEnum.DOWN);
+            StartCoroutine(MoveDOWN());
         }
         if (Input.GetKeyDown("a"))
         {
-            inventory.SelectSlot(UIMovementEnum.LEFT);
+            StartCoroutine(MoveLEFT());
         }
         if (Input.GetKeyDown("d"))
         {
-            inventory.SelectSlot(UIMovementEnum.RIGHT);
+            StartCoroutine(MoveRIGHT());
         }
         if(Input.GetKeyDown("space")){
             bool res = inventory.AddItem(replica);
             Debug.Log("Item inserted? " + res);
         }
+        if(Input.GetKeyDown("e")){
+            
+            Debug.Log("Item inserted? ");
+        }
+        yield return new WaitForSeconds(_delayTime);
+    }
+    IEnumerator MoveUP(){
+        inventory.SelectSlot(UIMovementEnum.UP);
+        yield return new WaitForSeconds(_delayTime);
+    }
+    IEnumerator MoveDOWN(){
+        inventory.SelectSlot(UIMovementEnum.DOWN);
+        yield return new WaitForSeconds(_delayTime);
+    }
+    IEnumerator MoveLEFT(){
+        inventory.SelectSlot(UIMovementEnum.LEFT);
+        yield return new WaitForSeconds(_delayTime);
+    }
+    IEnumerator MoveRIGHT(){
+        inventory.SelectSlot(UIMovementEnum.RIGHT);
+        yield return new WaitForSeconds(_delayTime);
     }
 }

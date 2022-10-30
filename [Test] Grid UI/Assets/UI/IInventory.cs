@@ -1,4 +1,5 @@
 public interface IInventory {
+    void AddSlot();
     bool AddItem(IItem item);
     bool RemoveItem();
     void SelectSlot(UIMovementEnum move);

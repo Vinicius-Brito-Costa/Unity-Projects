@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Slot : MonoBehaviour, ISlot
+public class Slot : ISlot
 {
     [SerializeField]
     private string _name;
@@ -27,7 +25,7 @@ public class Slot : MonoBehaviour, ISlot
         }
     }
 
-    public void AddItem(IItem item)
+    public override void AddItem(IItem item)
     {
         if (_item != null)
         {
@@ -40,12 +38,12 @@ public class Slot : MonoBehaviour, ISlot
         _name = _item.GetName();
         setIcon(_item.GetIcon());
     }
-    public void MoveItem(ISlot slot)
+    public override void MoveItem(ISlot slot)
     {
         slot.AddItem(_item);
         RemoveItem();
     }
-    public void RemoveItem()
+    public override void RemoveItem()
     {
         _item.DropItem(_item.GetItemCount());
         if(_item.GetItemCount() <= 0){
@@ -55,27 +53,27 @@ public class Slot : MonoBehaviour, ISlot
         removeIcon();
         Debug.Log("Item removed? " + (_item == null));
     }
-    public IItem GetItem()
+    public override IItem GetItem()
     {
         return _item;
     }
-    public bool IsEmpty(){
+    public override bool IsEmpty(){
         return _item == null;
     }
-    public void Activate(){
+    public override void Activate(){
         _isActive = true;
     }
-    public void Deactivate(){
+    public override void Deactivate(){
         _isActive = false;
     }
-    public bool IsActive(){
+    public override bool IsActive(){
         return _isActive;
     }
 
     private void setIcon(Texture2D icon){
         if(_icon != null){
             _icon.color = UIConstants.SLOT_USED_COLOR;
-            _icon.sprite = Sprite.Create(icon,new Rect(0.0f, 0.0f, icon.width, icon.height), new Vector2(0.5f, 0.5f), 100.0f);
+            _icon.sprite = Sprite.Create(icon, new Rect(0.0f, 0.0f, icon.width, icon.height), new Vector2(0.5f, 0.5f), 100.0f);
         }
     }
     private void removeIcon(){
@@ -84,14 +82,14 @@ public class Slot : MonoBehaviour, ISlot
             _icon.color = UIConstants.SLOT_EMPTY_COLOR;
         }
     }
-    public void MarkAsSelected(){
+    public override void MarkAsSelected(){
         _isSelected = true;
         _background.color = UIConstants.SLOT_BG_SELECTED_COLOR;
     }
-    public bool IsSelected(){
+    public override bool IsSelected(){
         return _isSelected;
     }
-    public void Deselect(){
+    public override void Deselect(){
         _isSelected = false;
         _background.color = UIConstants.SLOT_BG_UNSELECTED_COLOR;
     }

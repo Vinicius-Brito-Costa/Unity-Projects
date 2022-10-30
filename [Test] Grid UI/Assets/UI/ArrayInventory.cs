@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.UI;
 
-public class Inventory : GridLayoutGroup, IInventory
+public class ArrayInventory : GridLayoutGroup, IInventory
 {
     // _slots: contains ALL current slots, locked, unlocked, free and used.
     [SerializeField]
@@ -19,16 +19,71 @@ public class Inventory : GridLayoutGroup, IInventory
     private ISlot _prefab;
     private ISlot _selected;
     public String _teste;
-
-    struct InventoryMap
+    [SerializeField]
+    private InventoryMap _inventoryMap;
+    [Serializable]
+    public class InventoryMap
     {
-        int rows { get; set; }
-        int collumns { get; set; }
+        [SerializeField]
+        private List<SlotCollumn> _map = new List<SlotCollumn>();
+        [SerializeField]
+        private int rows;
+        [SerializeField]
+        private int collumns;
 
-        public InventoryMap(int rows, int collumns)
+        [Serializable]
+        public class SlotCollumn{
+            public List<ISlot> slots;
+            public SlotCollumn(List<ISlot> slots){
+                this.slots = slots;
+            }
+        }
+        public InventoryMap(Vector2Int map, List<ISlot> slots)
         {
-            this.rows = rows;
-            this.collumns = collumns;
+            this.rows = map.y;
+            this.collumns = map.x;
+            for(int rowCount = 0; rowCount < this.rows; rowCount++){
+                int index = (this.collumns) > (slots.Count - ((rowCount + 1) * rows)) ? (slots.Count - ((rowCount + 1) * rows)) : this.collumns;
+                List<ISlot> rowCollumns = slots.GetRange((rowCount * this.collumns), index);
+                _map.Add(new SlotCollumn(rowCollumns));
+            }
+        }
+
+        public SlotCollumn GetCollumn(int index){
+            return _map[index];
+        }
+        public ISlot GetSlot(Vector2Int position){
+            ISlot slot = null;
+            int yPos = position.y;
+            int xPos = position.x;
+            if(yPos >= _map.Count){
+                yPos = 0;
+            }
+            else if(yPos < 0){
+                yPos = _map.Count - 1;
+            }
+            SlotCollumn collumn = _map[yPos];
+            if(collumn != null &&
+                collumn.slots != null){
+                if(xPos >= collumn.slots.Count){
+                    xPos = 0;
+                }
+                else if(xPos < 0){
+                    xPos = collumn.slots.Count - 1;
+                }
+                slot = collumn.slots[xPos];
+            }
+            return slot;
+        }
+        public Vector2Int FindSlotPosition(ISlot slot){
+            Vector2Int pos = new Vector2Int(0, 0);
+            for(int rIndex = 0; rIndex < _map.Count; rIndex++){
+                List<ISlot> cSlots = _map[rIndex].slots;
+                if(cSlots.Contains(slot)){
+                    pos = new Vector2Int(rIndex, cSlots.IndexOf(slot));
+                }
+            }
+            return pos;
         }
     }
 
@@ -41,9 +96,11 @@ public class Inventory : GridLayoutGroup, IInventory
         _slots = new List<ISlot>(childs);
         _unlockedSlots = new List<ISlot>(childs);
         _freeSlots = new List<ISlot>(childs);
-        Debug.Log("Selected: " + _selected);
         _selected.MarkAsSelected();
         Debug.Log("Slot count: " + childs.Length);
+
+        // Set InventoryMap
+        _inventoryMap = new InventoryMap(GridLayoutGroupHelper.Size(this), _slots);
     }
 // Add Slot prefabs as a child of this element
 #if UNITY_EDITOR
@@ -53,10 +110,8 @@ public class Inventory : GridLayoutGroup, IInventory
         {
             ISlot[] childs = GetComponentsInChildren<ISlot>();
             int currentSlotCount = childs.Length;
-            Debug.Log("CurrentSlotCount: " + currentSlotCount);
             if (_slotCount > currentSlotCount)
             {
-                Debug.Log("Adding new Slots");
                 GameObject inventory = this.gameObject;
                 for (int index = currentSlotCount; index < _slotCount; index++)
                 {
@@ -68,7 +123,6 @@ public class Inventory : GridLayoutGroup, IInventory
             }
             else if (_slotCount < currentSlotCount)
             {
-                Debug.Log("Removing slot");
                 for (int removedCount = currentSlotCount - _slotCount; removedCount > 0; removedCount--)
                 {
                     DestroyImmediate(childs[removedCount - 1].gameObject);
@@ -135,37 +189,10 @@ public class Inventory : GridLayoutGroup, IInventory
     }
     public void SelectSlot(UIMovementEnum move)
     {
-        int currentIndex = _slots.IndexOf(_selected);
-        int totalSlots = _unlockedSlots.Count - 1;
-        int slotIndex = currentIndex;
-        Vector2Int inventoryMap = GridLayoutGroupHelper.Size(this);
-
-        if (UIMovementEnum.UP.Equals(move))
-        {
-            int selectedIndex = currentIndex - inventoryMap.x;
-            slotIndex = VerticalUIMovement(currentIndex, selectedIndex, totalSlots, inventoryMap);
-
-        }
-        if (UIMovementEnum.DOWN.Equals(move))
-        {
-            int selectedIndex = currentIndex + inventoryMap.x;
-            slotIndex = VerticalUIMovement(currentIndex, selectedIndex, totalSlots, inventoryMap);
-
-        }
-        if (UIMovementEnum.LEFT.Equals(move))
-        {
-            int selectedIndex = currentIndex - 1;
-            slotIndex = HorizontalUIMovement(currentIndex, selectedIndex, totalSlots);
-
-        }
-        if (UIMovementEnum.RIGHT.Equals(move))
-        {
-            int selectedIndex = currentIndex + 1;
-            slotIndex = HorizontalUIMovement(currentIndex, selectedIndex, totalSlots);
-        }
-        ISlot selectedSlot = _slots[slotIndex];
+        ISlot selectedSlot = UIMovement(move);
         if (selectedSlot != null)
         {
+            Debug.Log("Selected Slot is not null");
             if (selectedSlot.IsActive())
             {
                 _selected.Deselect();
@@ -173,6 +200,22 @@ public class Inventory : GridLayoutGroup, IInventory
                 _selected = selectedSlot;
             }
         }
+    }
+    private ISlot UIMovement(UIMovementEnum movementEnum){
+        int vert = VerticalMovement(movementEnum);
+        int hori = HorizontalMovement(movementEnum);
+        Vector2Int currentSlot = _inventoryMap.FindSlotPosition(_selected);
+        Debug.Log("Movement: " + movementEnum);
+        Debug.Log("Current Slot Position: " + currentSlot);
+        Vector2Int selectedSlot = new Vector2Int(currentSlot.y + hori, currentSlot.x + vert);
+        Debug.Log("Selected Slot Position: " + selectedSlot);
+        return _inventoryMap.GetSlot(selectedSlot);
+    }
+    private int VerticalMovement(UIMovementEnum movementEnum){
+        return UIMovementEnum.DOWN.Equals(movementEnum) ? -1 : UIMovementEnum.UP.Equals(movementEnum) ? 1 : 0;
+    }
+    private int HorizontalMovement(UIMovementEnum movementEnum){
+        return UIMovementEnum.LEFT.Equals(movementEnum) ? -1 : UIMovementEnum.RIGHT.Equals(movementEnum) ? 1 : 0;
     }
     private int GetCurrentRows()
     {

@@ -1,18 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public interface ISlot
+public abstract class ISlot : MonoBehaviour
 {
-    void AddItem(IItem item);
-    void MoveItem(ISlot slot);
-    void RemoveItem();
-    IItem GetItem();
-    bool IsEmpty();
-    void Activate();
-    void Deactivate();
-    bool IsActive();
-    void MarkAsSelected();
-    bool IsSelected();
-    void Deselect();
+    public abstract void AddItem(IItem item);
+    public abstract void MoveItem(ISlot slot);
+    public abstract void RemoveItem();
+    public abstract IItem GetItem();
+    public abstract bool IsEmpty();
+    public abstract void Activate();
+    public abstract void Deactivate();
+    public abstract bool IsActive();
+    public abstract void MarkAsSelected();
+    public abstract bool IsSelected();
+    public abstract void Deselect();
 }
