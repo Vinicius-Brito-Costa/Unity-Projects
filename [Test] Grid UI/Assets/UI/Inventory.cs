@@ -20,18 +20,6 @@ public class Inventory : GridLayoutGroup, IInventory
     private ISlot _selected;
     public String _teste;
 
-    struct InventoryMap
-    {
-        int rows { get; set; }
-        int collumns { get; set; }
-
-        public InventoryMap(int rows, int collumns)
-        {
-            this.rows = rows;
-            this.collumns = collumns;
-        }
-    }
-
     new void Start()
     {
         base.Start();

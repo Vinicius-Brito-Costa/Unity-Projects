@@ -84,13 +84,17 @@ public class Slot : ISlot
     }
     public override void MarkAsSelected(){
         _isSelected = true;
-        _background.color = UIConstants.SLOT_BG_SELECTED_COLOR;
+        if(_background){
+            _background.color = UIConstants.SLOT_BG_SELECTED_COLOR;
+        }
     }
     public override bool IsSelected(){
         return _isSelected;
     }
     public override void Deselect(){
         _isSelected = false;
-        _background.color = UIConstants.SLOT_BG_UNSELECTED_COLOR;
+        if(_background){
+            _background.color = UIConstants.SLOT_BG_UNSELECTED_COLOR;
+        }
     }
 }
