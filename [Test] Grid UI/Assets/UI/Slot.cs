@@ -45,13 +45,11 @@ public class Slot : ISlot
     }
     public override void RemoveItem()
     {
-        _item.DropItem(_item.GetItemCount());
-        if(_item.GetItemCount() <= 0){
+        if(_item != null){
             _name = "";
             _item = null;
+            removeIcon();           
         }
-        removeIcon();
-        Debug.Log("Item removed? " + (_item == null));
     }
     public override IItem GetItem()
     {

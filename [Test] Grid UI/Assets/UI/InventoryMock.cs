@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class InventoryMock : MonoBehaviour
@@ -10,13 +9,6 @@ public class InventoryMock : MonoBehaviour
     private ArrayInventory inventory;
     [SerializeField]
     private float _delayTime = 2;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
         StartCoroutine(Move());
@@ -40,12 +32,24 @@ public class InventoryMock : MonoBehaviour
             StartCoroutine(MoveRIGHT());
         }
         if(Input.GetKeyDown("space")){
-            bool res = inventory.AddItem(replica);
-            Debug.Log("Item inserted? " + res);
+            inventory.AddItem(replica);
+            Debug.Log("Item inserted");
+        }
+        if(Input.GetKeyDown("r")){
+            inventory.RemoveItem();
+            Debug.Log("Item Removed");
         }
         if(Input.GetKeyDown("e")){
-            
-            Debug.Log("Item inserted? ");
+            inventory.AddItem(replica);
+            Debug.Log("Item inserted");
+        }
+        if(Input.GetKeyDown("z")){
+            inventory.AddSlot();
+            Debug.Log("Slot added");
+        }
+        if(Input.GetKeyDown("f")){
+            Debug.Log("Slot SubMenu");
+            inventory.OpenSlotMenu();
         }
         yield return new WaitForSeconds(_delayTime);
     }

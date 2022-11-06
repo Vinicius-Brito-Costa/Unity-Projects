@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+[Serializable]
 public class InventoryMap
 {
     [SerializeField]
-    private List<SlotRow> _map = new List<SlotRow>();
+    private List<SlotRow> _map;
     [SerializeField]
     private int _rows;
     [SerializeField]
@@ -14,26 +15,69 @@ public class InventoryMap
     {
         _rows = map.y;
         _columns = map.x;
+        LoadMap(_rows, _columns, slots);
+    }
+    private void LoadMap(int rows, int columns, List<ISlot> slots){
         int itemCount = slots.Count;
         int availableSlots = slots.Count;
-
-        for (int rowCount = 0; rowCount < _rows; rowCount++)
+        if(_map == null){
+            _map = new List<SlotRow>();
+        }
+        
+        for (int rowCount = 0; rowCount < rows; rowCount++)
         {
             int itensInRow = availableSlots;
-            if (itensInRow >= _columns)
+            if (itensInRow >= columns)
             {
-                itensInRow = _columns;
-                availableSlots -= _columns;
+                itensInRow = columns;
+                availableSlots -= columns;
             }
 
-            List<ISlot> rowColumns = slots.GetRange((rowCount * _columns), itensInRow);
+            List<ISlot> rowColumns = slots.GetRange((rowCount * columns), itensInRow);
             _map.Add(new SlotRow(rowColumns));
         }
     }
-
+    private List<ISlot> AddSlotRow(List<ISlot> slots){
+        int slotCount = slots.Count;
+        List<ISlot> remainingSlots = new List<ISlot>();
+        if(slotCount > _columns){
+            slotCount = _columns;
+            remainingSlots = slots.GetRange(_columns, slotCount);
+        }
+        List<ISlot> slotsToAdd = slots.GetRange(0, slotCount);
+        _map.Add(new SlotRow(slotsToAdd));
+        _rows++;
+        return remainingSlots;
+    }
+    private void AddSlotRow(ISlot slot){
+        AddSlotRow(new List<ISlot>(){slot});
+    }
+    private bool SlotRowIsFull(SlotRow slotRow){
+        return slotRow._slots.Count >= _columns;
+    }
+    private void AddSlotToLastRow(ISlot slot){
+        _map[_rows - 1]._slots.Add(slot);
+    }
     public SlotRow GetCollumn(int index)
     {
         return _map[index];
+    }
+    public void AddSlot(ISlot slot){
+        if(SlotRowIsFull(_map[_rows - 1])){
+            AddSlotRow(slot);
+        }
+        else {
+            AddSlotToLastRow(slot);
+        }
+    }
+    public void RemoveSlot(){
+        if(_map[_rows - 1]._slots.Count <= 1){
+            _map[_rows - 1] = null;
+            _rows--;
+        }
+        else {
+            _map[_rows - 1]._slots.RemoveAt(-1);
+        }
     }
     public ISlot GetSlot(Vector2Int position, UIMovementEnum movementEnum)
     {
@@ -86,14 +130,14 @@ public class InventoryMap
         }
         return slot;
     }
-    private bool ItemExists(int row, int collumn)
+    private bool ItemExists(int row, int column)
     {
         try
         {
             SlotRow possibleRow = _map[row];
             if (possibleRow != null)
             {
-                if (possibleRow._slots[collumn] != null)
+                if (possibleRow._slots[column] != null)
                 {
                     return true;
                 }
