@@ -1,28 +1,39 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
-public class Slot : ISlot
+public class Slot : ISlot, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField]
     private string _name;
+    [SerializeField]
+    private UIConfig _config;
     private IItem _item;
     [SerializeField]
     private bool _isActive;
     [SerializeField]
     private bool _isSelected;
+    [SerializeField]
+    private SO_Submenu _subMenu;
+    [SerializeField]
+    private bool _submenuIsOpen;
     private Image _background;
     private Image _icon;
+    [SerializeField]
+    private UnityEvent<ISlot> _eventHandler;
 
     private void Start() {
-        GameObject backgroundChild = GameObjectUtil.Instance().getChildGameObject(gameObject, UIConstants.SLOT_BACKGROUND_GAME_OBJECT_NAME);
+        GameObject backgroundChild = GameObjectUtil.Instance().getChildGameObject(gameObject, UIConfig.SLOT_BACKGROUND_GAME_OBJECT_NAME);
         if(backgroundChild != null){
             _background = backgroundChild.GetComponent<Image>();
         }
 
-        GameObject iconChild = GameObjectUtil.Instance().getChildGameObject(gameObject, UIConstants.SLOT_ICON_GAME_OBJECT_NAME);
+        GameObject iconChild = GameObjectUtil.Instance().getChildGameObject(gameObject, UIConfig.SLOT_ICON_GAME_OBJECT_NAME);
         if(iconChild != null){
             _icon = iconChild.GetComponent<Image>();
         }
+        
     }
 
     public override void AddItem(IItem item)
@@ -70,20 +81,20 @@ public class Slot : ISlot
 
     private void setIcon(Texture2D icon){
         if(_icon != null){
-            _icon.color = UIConstants.SLOT_USED_COLOR;
+            _icon.color = _config.GetUsedSlotColor();
             _icon.sprite = Sprite.Create(icon, new Rect(0.0f, 0.0f, icon.width, icon.height), new Vector2(0.5f, 0.5f), 100.0f);
         }
     }
     private void removeIcon(){
         if(_icon != null){
             _icon.sprite = null;
-            _icon.color = UIConstants.SLOT_EMPTY_COLOR;
+            _icon.color = _config.GetEmptySlotColor();
         }
     }
     public override void MarkAsSelected(){
         _isSelected = true;
         if(_background){
-            _background.color = UIConstants.SLOT_BG_SELECTED_COLOR;
+            _background.color = _config.GetBGSelectedSlotColor();
         }
     }
     public override bool IsSelected(){
@@ -92,7 +103,52 @@ public class Slot : ISlot
     public override void Deselect(){
         _isSelected = false;
         if(_background){
-            _background.color = UIConstants.SLOT_BG_UNSELECTED_COLOR;
+            _background.color = _config.GetBGUnselectedSlotColor();
         }
+    }
+    public override bool OpenSubmenu()
+    {
+        bool opened = false;
+        if(_item != null){
+            if(_submenuIsOpen){
+                opened = true;
+            }
+            else{
+                
+            }
+        }
+        
+        return opened;
+    }
+    public override bool IsSubmenuOpen()
+    {
+        throw new System.NotImplementedException();
+    }
+    public override void CloseSubmenu()
+    {
+        throw new System.NotImplementedException();
+    }
+    private void OnEnable() {
+        GameObject parent = transform.parent.gameObject;
+        if(parent != null){
+            IInventory parentInventory = parent.GetComponent<IInventory>();
+            if(parentInventory != null){
+                Debug.Log("Foi");
+                _eventHandler.AddListener(parentInventory.SetSelectedSlot);
+            }
+        }
+    }
+    private void OnDisable() {
+        _eventHandler.RemoveAllListeners();
+    }
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        Debug.Log("Called");
+        _eventHandler.Invoke(this);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        Deselect();
     }
 }

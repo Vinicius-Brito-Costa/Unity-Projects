@@ -16,16 +16,17 @@ public class Item : MonoBehaviour, IItem
     public void AddItem(int count){
         if(_count > 0){
             if(_itemData.IsStackable){
-            _count += count;
+                _count += Mathf.Abs(count);
             }
         }
         else {
             _count++;
         }
     }
-    public void UseItem(GameObject user){
+    public void UseItem(){
         if(_count > 0){
             // do stuff
+            Debug.Log("Using Item" + _itemData.Name + "...");
             _count--;
         }
     }

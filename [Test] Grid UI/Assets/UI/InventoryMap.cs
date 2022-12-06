@@ -79,7 +79,7 @@ public class InventoryMap
             _map[_rows - 1]._slots.RemoveAt(-1);
         }
     }
-    public ISlot GetSlot(Vector2Int position, UIMovementEnum movementEnum)
+    public ISlot GetSlot(Vector2Int position, UIControlEnum movementEnum)
     {
         ISlot slot = null;
         int yPos = position.y;
@@ -128,8 +128,14 @@ public class InventoryMap
                 
             }
         }
+        else {
+            if(ItemExists(0, 0)){
+                slot = _map[0]._slots[0];
+            }
+        }
         return slot;
     }
+    #pragma warning disable 0168 // Disable unused 'e' in catch
     private bool ItemExists(int row, int column)
     {
         try
@@ -143,7 +149,7 @@ public class InventoryMap
                 }
             }
         }
-        catch (Exception e) { }
+        catch (Exception e) {  }
         return false;
     }
     public Vector2Int FindSlotPosition(ISlot slot)
