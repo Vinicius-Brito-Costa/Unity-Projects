@@ -243,12 +243,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22dfbebe508e64de4afc1209eb8473a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _mouseOverEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  _clickEvent:
+    m_PersistentCalls:
+      m_Calls: []
   _name: 
   _config: {fileID: 11400000, guid: 3dcd6d2d4680d44b2a243497b6a7b02e, type: 2}
   _isActive: 1
   _isSelected: 0
-  _subMenu: {fileID: 0}
+  _subMenu: {fileID: 11400000, guid: 06ba516b0c9b04baf8f2da3f51e46109, type: 2}
   _submenuIsOpen: 0
-  _eventHandler:
-    m_PersistentCalls:
-      m_Calls: []

@@ -83,6 +83,12 @@ public class Inventory : GridLayoutGroup, IInventory
             _currentState = (SO_BaseInventoryState) _currentState.Action();
         }
     }
+    public void Action(UIControlEnum pressedButton)
+    {
+        if(_currentState != null){
+            _currentState = (SO_BaseInventoryState) _currentState.Action(pressedButton);
+        }
+    }
     public void Move(UIControlEnum move)
     {
         //_currentState = _currentState.Move(move);

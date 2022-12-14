@@ -3,8 +3,11 @@ using UnityEngine;
 public class SelectedState : SO_BaseInventoryState{
     private static InventoryStateEnum _state = InventoryStateEnum.SELECTED;
     public override IInventoryState Action(){
+        return Action(_baseUIController.GetButtonPressed());
+    }
+    public override IInventoryState Action(UIControlEnum pressedButton){
         IInventoryState returnState = this;
-        switch(_baseUIController.GetButtonPressed()){
+        switch(pressedButton){
             case UIControlEnum.UP:
             case UIControlEnum.DOWN:
             case UIControlEnum.LEFT:

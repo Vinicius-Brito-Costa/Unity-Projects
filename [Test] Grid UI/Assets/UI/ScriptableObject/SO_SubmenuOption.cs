@@ -1,16 +1,10 @@
 using UnityEngine;
-using TMPro;
-public abstract class SO_SubmenuOption : ScriptableObject, ISubmenuOption{
+[CreateAssetMenu(fileName = "SubmenuOption", menuName = "Inventory/Submenu/SubmenuOption", order = 50)]
+public class SO_SubmenuOption : ScriptableObject, ISubmenuOption{
     [SerializeField]
     protected UIAction _action;
-    [SerializeField]
-    protected TextMeshProUGUI _textMeshPro;
 
     public UIAction GetOptionKey(){
         return _action;
-    }
-    public abstract void Action();
-    public TextMeshProUGUI GetTextMesh(){
-        return _textMeshPro;
     }
 }

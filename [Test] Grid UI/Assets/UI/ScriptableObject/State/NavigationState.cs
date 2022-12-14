@@ -4,18 +4,19 @@ using UnityEngine;
 public class NavigationState : SO_BaseInventoryState
 {
     private static InventoryStateEnum _state = InventoryStateEnum.NAVIGATION;
-    [SerializeField]
-    private SO_BaseInventoryState _submenuState;
+    private SubmenuState _submenuState;
 
     public NavigationState() : base() {
         if(_submenuState != null){
             _submenuState.SetUIController(_baseUIController);
         }
     }
-    public override IInventoryState Action()
+    public override IInventoryState Action(){
+        return Action(_baseUIController.GetButtonPressed());
+    }
+    public override IInventoryState Action(UIControlEnum pressedButton)
     {
         IInventoryState returnState = this;
-        UIControlEnum pressedButton = _baseUIController.GetButtonPressed();
         switch(pressedButton){
             case UIControlEnum.UP:
             case UIControlEnum.DOWN:
@@ -23,11 +24,14 @@ public class NavigationState : SO_BaseInventoryState
             case UIControlEnum.RIGHT:
                 returnState = Move(pressedButton);
                 break;
+            case UIControlEnum.MOUSE_LEFT_CLICK:
             case UIControlEnum.ACTION:
-                // TODO: change state
                 ISlot currentSlot = _slotManager.GetSelectedSlot();
                 if(currentSlot != null && currentSlot.OpenSubmenu()){
+                    _submenuState = (SubmenuState) SubmenuState.CreateInstance("SubmenuState");
                     _submenuState.SetPreviousState(this);
+                    _submenuState.SetUIController(_baseUIController);
+                    _submenuState.SetSlotManager(_slotManager);
                     returnState = _submenuState;
                 }
                 break;
@@ -103,11 +107,6 @@ public class NavigationState : SO_BaseInventoryState
         ISlot selectedSlot = UIMovement(move);
         if (selectedSlot != null && selectedSlot.IsActive())
         {
-            // if (_slotManager.GetSelectedSlot() != null && _slotManager.GetSelectedSlot().IsSelected())
-            // {
-            //     _slotManager.GetSelectedSlot().Deselect();
-                
-            // }
             selectedSlot.MarkAsSelected();
             _slotManager.SetSelectedSlot(selectedSlot);
         }

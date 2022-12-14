@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
-public class Slot : ISlot, IPointerEnterHandler, IPointerExitHandler
+public class Slot : ISlot
 {
     [SerializeField]
     private string _name;
@@ -20,8 +20,7 @@ public class Slot : ISlot, IPointerEnterHandler, IPointerExitHandler
     private bool _submenuIsOpen;
     private Image _background;
     private Image _icon;
-    [SerializeField]
-    private UnityEvent<ISlot> _eventHandler;
+    private Submenu _submenuObject;
 
     private void Start() {
         GameObject backgroundChild = GameObjectUtil.Instance().getChildGameObject(gameObject, UIConfig.SLOT_BACKGROUND_GAME_OBJECT_NAME);
@@ -34,6 +33,7 @@ public class Slot : ISlot, IPointerEnterHandler, IPointerExitHandler
             _icon = iconChild.GetComponent<Image>();
         }
         
+        _submenuObject = _subMenu?.CreateSubmenu(this.gameObject);
     }
 
     public override void AddItem(IItem item)
@@ -109,12 +109,15 @@ public class Slot : ISlot, IPointerEnterHandler, IPointerExitHandler
     public override bool OpenSubmenu()
     {
         bool opened = false;
-        if(_item != null){
+        if(_item == null){
             if(_submenuIsOpen){
                 opened = true;
             }
             else{
-                
+                Debug.Log("Abrir Submenu");
+                _submenuObject.gameObject.SetActive(true);
+                _submenuIsOpen = true;
+                opened = true;
             }
         }
         
@@ -122,33 +125,16 @@ public class Slot : ISlot, IPointerEnterHandler, IPointerExitHandler
     }
     public override bool IsSubmenuOpen()
     {
-        throw new System.NotImplementedException();
+        return _submenuIsOpen;
+    }
+    public override Submenu GetSubmenu()
+    {
+        return _submenuObject;
     }
     public override void CloseSubmenu()
     {
-        throw new System.NotImplementedException();
-    }
-    private void OnEnable() {
-        GameObject parent = transform.parent.gameObject;
-        if(parent != null){
-            IInventory parentInventory = parent.GetComponent<IInventory>();
-            if(parentInventory != null){
-                Debug.Log("Foi");
-                _eventHandler.AddListener(parentInventory.SetSelectedSlot);
-            }
-        }
-    }
-    private void OnDisable() {
-        _eventHandler.RemoveAllListeners();
-    }
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        Debug.Log("Called");
-        _eventHandler.Invoke(this);
+        _submenuObject.gameObject.SetActive(false);
+        _submenuIsOpen = false;
     }
 
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        Deselect();
-    }
 }

@@ -1,5 +1,5 @@
     public enum UIControlEnum{
-        UP, DOWN, LEFT, RIGHT, ACTION, RETURN, NOT_PRESSED
+        UP, DOWN, LEFT, RIGHT, ACTION, RETURN, MOUSE_MOVE, MOUSE_LEFT_CLICK, NOT_PRESSED
     }
 
     public static class UIControlEnumMethods{

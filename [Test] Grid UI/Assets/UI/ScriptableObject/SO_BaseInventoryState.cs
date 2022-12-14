@@ -13,6 +13,7 @@ public abstract class SO_BaseInventoryState : ScriptableObject, IInventoryState 
     public IUIController GetUIController(){
         return _baseUIController;
     }
+    public abstract IInventoryState Action(UIControlEnum pressedButton);
     public abstract IInventoryState Action();
     public abstract IInventoryState AddSlot();
     public abstract IInventoryState AddItem(IItem item);

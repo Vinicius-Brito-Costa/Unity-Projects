@@ -46,7 +46,6 @@
      <Compile Include="Assets/UI/Interface/IUIController.cs" />
      <Compile Include="Assets/UI/Interface/IItem.cs" />
      <Compile Include="Assets/UI/ScriptableObject/Controller/DefaultUIController.cs" />
-     <Compile Include="Assets/UI/ScriptableObject/Submenu/DefaultSubmenuOption.cs" />
      <Compile Include="Assets/UI/Slot.cs" />
      <Compile Include="Assets/UI/Interface/ISlot.cs" />
      <Compile Include="Assets/Util/GameObjectUtil.cs" />
@@ -58,7 +57,6 @@
      <Compile Include="Assets/UI/Enum/UIControlEnum.cs" />
      <Compile Include="Assets/UI/Inventory.cs" />
      <Compile Include="Assets/UI/ScriptableObject/SO_BaseUIController.cs" />
-     <Compile Include="Assets/UI/ScriptableObject/Submenu/DefaultSubmenu.cs" />
      <Compile Include="Assets/UI/ScriptableObject/SO_Submenu.cs" />
      <Compile Include="Assets/UI/Interface/IInventory.cs" />
      <Compile Include="Assets/UI/ScriptableObject/SO_SubmenuOption.cs" />
@@ -68,6 +66,7 @@
      <Compile Include="Assets/UI/ScriptableObject/State/NavigationState.cs" />
      <Compile Include="Assets/UI/Enum/UIAction.cs" />
      <Compile Include="Assets/UI/UIConfig.cs" />
+     <Compile Include="Assets/UI/Submenu/Submenu.cs" />
      <None Include="Assets/TextMesh Pro/Shaders/TMPro.cginc" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_Bitmap.shader" />

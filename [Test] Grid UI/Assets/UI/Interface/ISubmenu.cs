@@ -1,4 +1,4 @@
 public interface ISubmenu{
-    public void Action();
-    public void Move(UIControlEnum move);
+    void Action(ISlot slot);
+    void Move(UIControlEnum move);
 }
