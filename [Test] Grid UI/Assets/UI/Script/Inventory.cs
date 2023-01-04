@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
+[ExecuteInEditMode]
 public class Inventory : GridLayoutGroup, IInventory
 {
     // _slots: contains ALL current slots, locked, unlocked, free and used.
@@ -32,14 +33,16 @@ public class Inventory : GridLayoutGroup, IInventory
 
         // Set InventoryMap
         _inventoryMap = new InventoryMap(GridLayoutGroupHelper.Size(this), _slots);
+        _slots.ForEach(slot => slot.UpdateColor(_colorSchema));
     }
     // Add Slot prefabs as a child of this element
-#if UNITY_EDITOR
     void Update()
     {
-        UpdateSlotList();
+        if(!Application.isPlaying && _colorSchema != null){
+            UpdateSlotList();
+            UpdateColor(_colorSchema);
+        }
     }
-#endif
     private void UpdateSlotList()
     {
         if (_prefab)
@@ -56,9 +59,9 @@ public class Inventory : GridLayoutGroup, IInventory
                     createdSlot.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
                     if (Application.isPlaying)
                     {
-                        UpdateColor(_colorSchema);
                         _inventoryMap.AddSlot(createdSlot);
                         _slots.Add(createdSlot);
+                        UpdateColor(_colorSchema);
                     }
                 }
             }
@@ -79,6 +82,7 @@ public class Inventory : GridLayoutGroup, IInventory
     public ISlot AddSlot()
     {
         _slotCount++;
+        UpdateSlotList();
         return _slots[_slots.Count - 1];
     }
     public void AddItem(IItem item)
@@ -153,7 +157,7 @@ public class Inventory : GridLayoutGroup, IInventory
     public void UpdateColor(UIColorSchema colorSchema)
     {
         _colorSchema = colorSchema;
-        _submenu.UpdateColor(_colorSchema);
+        _submenu?.UpdateColor(_colorSchema);
         _slots?.ForEach(slot => {
             if(slot){
                 slot.UpdateColor(_colorSchema);

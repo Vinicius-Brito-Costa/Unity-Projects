@@ -36,7 +36,6 @@ public class Slot : ISlot
             AddItem(item);
         }
     }
-
     public override void AddItem(IItem item)
     {
         if (_item != null)
@@ -48,7 +47,7 @@ public class Slot : ISlot
             _item = (Item)item;
         }
         _name = _item.GetName();
-        setIcon(_item.GetIcon());
+        SetIcon(_item.GetIcon());
     }
     public override void MoveItem(ISlot slot)
     {
@@ -62,7 +61,7 @@ public class Slot : ISlot
             _name = "";
             _item = null;
             _activeSubmenu = null;
-            removeIcon();
+            RemoveIcon();
         }
     }
     public override IItem GetItem()
@@ -86,29 +85,26 @@ public class Slot : ISlot
         return _isActive;
     }
 
-    private void setIcon(Texture2D icon)
+    private void SetIcon(Texture2D icon)
     {
         if (_icon != null)
         {
-            _icon.color = _colorSchema.GetUsedSlotColor();
             _icon.sprite = Sprite.Create(icon, new Rect(0.0f, 0.0f, icon.width, icon.height), new Vector2(0.5f, 0.5f), 100.0f);
+            UpdateColor(_colorSchema);
         }
     }
-    private void removeIcon()
+    private void RemoveIcon()
     {
         if (_icon != null)
         {
             _icon.sprite = null;
-            _icon.color = _colorSchema.GetEmptySlotColor();
+            UpdateColor(_colorSchema);
         }
     }
     public override void MarkAsSelected()
     {
         _isSelected = true;
-        if (_background && _colorSchema)
-        {
-            _background.color = _colorSchema.GetBGSelectedSlotColor();
-        }
+        UpdateColor(_colorSchema);
     }
     public override bool IsSelected()
     {
@@ -117,10 +113,7 @@ public class Slot : ISlot
     public override void Deselect()
     {
         _isSelected = false;
-        if (_background)
-        {
-            _background.color = _colorSchema.GetBGUnselectedSlotColor();
-        }
+        UpdateColor(_colorSchema);
     }
     public override bool OpenSubmenu(ISubmenu submenu)
     {
@@ -138,6 +131,7 @@ public class Slot : ISlot
             List<UIAction.Action> activeOptions = _item.GetSubmenuActiveOptions();
             _activeSubmenu = (Submenu) submenu;
             _activeSubmenu.SetActiveActions(activeOptions);
+            _activeSubmenu.UpdateColor(_colorSchema);
             _activeSubmenu.gameObject.SetActive(true);
         }
 
@@ -158,6 +152,45 @@ public class Slot : ISlot
 
     public override void UpdateColor(UIColorSchema colorSchema)
     {
+        if(colorSchema == null) return;
+
         _colorSchema = colorSchema;
+
+        if(_background && _icon){
+
+            if(_item == null){
+                _icon.sprite = null;
+                _name = "";
+            }
+            else if(_icon.sprite == null){
+                SetIcon(_item.GetIcon());
+            }
+
+            if(IsActive()){
+                // Default state is: Slot is active, unselected, empty with no item. 
+                _background.color = _colorSchema.GetBGUnselectedSlotColor();
+                _icon.color = _colorSchema.GetIconEmptyColor();
+
+                if(IsSelected()){
+                    _background.color = _colorSchema.GetBGSelectedSlotColor();
+
+                    if(IsEmpty()){
+                        _icon.color = _colorSchema.GetIconEmptyAndSelectedColor();
+                    }
+                }
+
+                if(!IsEmpty()){
+                    _icon.color = _colorSchema.GetIconColor();
+                }
+            }
+            else {
+                _background.color = _colorSchema.GetSlotDisabledColor();
+                _icon.color = _colorSchema.GetIconEmptyColor();
+                if(!IsEmpty()){
+                    _icon.color = _colorSchema.GetIconColor();
+                }
+            }
+        }
+        _activeSubmenu?.UpdateColor(colorSchema);
     }
 }

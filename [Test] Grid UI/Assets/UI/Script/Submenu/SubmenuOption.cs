@@ -1,10 +1,13 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+using UnityEngine.EventSystems;
 
 [ExecuteInEditMode]
 [RequireComponent(typeof(Image))]
 [RequireComponent(typeof(Button))]
-public class SubmenuOption : MonoBehaviour, IColorized {
+public class SubmenuOption : MonoBehaviour, IColorized,
+    IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IPointerDownHandler {
     private Submenu _submenu;
     [SerializeField]
     private UIAction.Action _type;
@@ -13,7 +16,10 @@ public class SubmenuOption : MonoBehaviour, IColorized {
     [SerializeField]
     private Button _button;
     [SerializeField]
+    private TextMeshProUGUI _text;
+    [SerializeField]
     private bool _active;
+    private UIColorSchema _colorSchema;
     public void Start(){
         Setup();
     }
@@ -42,21 +48,53 @@ public class SubmenuOption : MonoBehaviour, IColorized {
     }
     public void UpdateColor(UIColorSchema colorSchema)
     {
-        if(_button != null){
-            ColorBlock colorBlock = new ColorBlock();
-            colorBlock.normalColor = colorSchema.GetBGUnselectedSlotColor();
-            colorBlock.selectedColor = colorSchema.GetBGSelectedSlotColor();
-            colorBlock.highlightedColor = colorSchema.GetBGSelectedSlotColor();
-            colorBlock.pressedColor = colorSchema.GetBGSelectedSlotColor();
-            colorBlock.disabledColor = colorSchema.GetDisabledColor();
-            colorBlock.colorMultiplier = colorSchema.GetColorMultiplier();
-            _button.colors = colorBlock;
+        if(colorSchema){
+            _colorSchema = colorSchema;
+            if(_button){
+                ColorBlock colorBlock = new ColorBlock();
+                colorBlock.normalColor = colorSchema.GetSubmenuUnselectedColor();
+                colorBlock.selectedColor = colorSchema.GetSubmenuSelectedColor();
+                colorBlock.highlightedColor = colorSchema.GetSubmenuSelectedColor();
+                colorBlock.pressedColor = colorSchema.GetSubmenuSelectedColor();
+                colorBlock.disabledColor = colorSchema.GetSubmenuDisabledColor();
+                colorBlock.colorMultiplier = colorSchema.GetSubmenuColorMultiplier();
+                _button.colors = colorBlock;
+            }
         }
     }
     public void Activate(){
         _button.interactable = true;
+        _text.color = _colorSchema.GetSubmenuUnselectedTextColor();
     }
     public void Deactivate(){
         _button.interactable = false;
+        _text.color = _colorSchema.GetSubmenuDisabledTextColor();
+    }
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if(_button.interactable){
+            _text.color = _colorSchema.GetSubmenuSelectedTextColor();
+        }
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if(_button.interactable){
+            _text.color = _colorSchema.GetSubmenuUnselectedTextColor();
+        }
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if(_button.interactable){
+            _text.color = _colorSchema.GetSubmenuSelectedTextColor();
+        }
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        if(_button.interactable){
+            _text.color = _colorSchema.GetSubmenuSelectedTextColor();
+        }
     }
 }

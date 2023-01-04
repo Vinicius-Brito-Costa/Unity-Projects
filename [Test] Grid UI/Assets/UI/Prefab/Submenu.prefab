@@ -56,6 +56,7 @@ MonoBehaviour:
   _type: 3
   _image: {fileID: 6079640862955626468}
   _button: {fileID: 4738291131286950410}
+  _text: {fileID: 2510365451656035186}
   _active: 0
 --- !u!114 &6079640862955626468
 MonoBehaviour:
@@ -195,6 +196,7 @@ MonoBehaviour:
   _type: 2
   _image: {fileID: 5905533290491634908}
   _button: {fileID: 4954717643557011579}
+  _text: {fileID: 2262928690180002439}
   _active: 0
 --- !u!114 &5905533290491634908
 MonoBehaviour:
@@ -469,6 +471,7 @@ MonoBehaviour:
   _type: 0
   _image: {fileID: 5829926088596873561}
   _button: {fileID: 82120639269744090}
+  _text: {fileID: 1109333090969943106}
   _active: 0
 --- !u!114 &5829926088596873561
 MonoBehaviour:
@@ -902,7 +905,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ced5ce31e2f74db5a0dd3f252528307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _colorSchema: {fileID: 0}
   _options:
   - {fileID: 6295046940020898144}
   - {fileID: 4781253830902655523}
@@ -1099,6 +1101,7 @@ MonoBehaviour:
   _type: 1
   _image: {fileID: 1808188704509501607}
   _button: {fileID: 8830101578224554841}
+  _text: {fileID: 8818513945452865412}
   _active: 0
 --- !u!114 &1808188704509501607
 MonoBehaviour:

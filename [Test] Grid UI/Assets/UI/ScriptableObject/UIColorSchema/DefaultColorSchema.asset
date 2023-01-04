@@ -12,9 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf75ac9b2e4a14a599613bdd54c4cc7d, type: 3}
   m_Name: DefaultColorSchema
   m_EditorClassIdentifier: 
-  SLOT_EMPTY_COLOR: {r: 0, g: 0, b: 0, a: 0.796}
-  SLOT_USED_COLOR: {r: 0.08610715, g: 0.106508784, b: 0.14150941, a: 1}
-  SLOT_BG_SELECTED_COLOR: {r: 0.735849, g: 0.735849, b: 0.735849, a: 1}
-  SLOT_BG_UNSELECTED_COLOR: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 255}
-  DISABLED_COLOR: {r: 0.0754717, g: 0.0754717, b: 0.0754717, a: 255}
-  COLOR_MULTIPLIER: 1
+  _defaultIconColor: {r: 1, g: 1, b: 1, a: 1}
+  _emptyIconColor: {r: 0.26383945, g: 0.3059295, b: 0.46226418, a: 1}
+  _emptyAndSelectedIconColor: {r: 0.6840513, g: 0.7081405, b: 0.7924528, a: 1}
+  _emptySlotTextColor: {r: 0, g: 0, b: 0, a: 1}
+  _emptySlotColor: {r: 0.6792453, g: 0.6792453, b: 0.6792453, a: 1}
+  _usedSlotTextColor: {r: 0, g: 0, b: 0, a: 0}
+  _usedSlotColor: {r: 255, g: 255, b: 255, a: 1}
+  _selectedSlotTextColor: {r: 0, g: 0, b: 0, a: 1}
+  _selectedSlotColor: {r: 1, g: 1, b: 1, a: 1}
+  _unselectedSlotTextColor: {r: 0, g: 0, b: 0, a: 1}
+  _unselectedSlotColor: {r: 0.08713066, g: 0.090637065, b: 0.20754719, a: 255}
+  _disabledSlotTextColor: {r: 0, g: 0, b: 0, a: 1}
+  _disabledSlotColor: {r: 0.2264151, g: 0.2264151, b: 0.2264151, a: 255}
+  _slotColorMultiplier: 1
+  _unselectedSubmenuTextColor: {r: 0.18867922, g: 0.18867922, b: 0.18867922, a: 255}
+  _unselectedSubmenuColor: {r: 0.4245283, g: 0.4245283, b: 0.4245283, a: 255}
+  _disabledSubmenuTextColor: {r: 0.6698113, g: 0.6698113, b: 0.6698113, a: 255}
+  _disabledSubmenuColor: {r: 0.11320752, g: 0.11320752, b: 0.11320752, a: 255}
+  _selectedSubmenuTextColor: {r: 0.4339623, g: 0.4339623, b: 0.4339623, a: 255}
+  _selectedSubmenuColor: {r: 0.764151, g: 0.764151, b: 0.764151, a: 255}
+  _submenuColorMultiplier: 1

@@ -19,8 +19,6 @@ public class NavigationState : SO_BaseInventoryState
         IInventoryState returnState = this;
         switch(pressedButton){
             case UIControlEnum.UP:
-                _slotManager.AddSlot();
-                break;
             case UIControlEnum.DOWN:
             case UIControlEnum.LEFT:
             case UIControlEnum.RIGHT:
@@ -41,7 +39,7 @@ public class NavigationState : SO_BaseInventoryState
                 }
                 break;
             case UIControlEnum.RETURN:
-                // TODO: Exit navigation
+                _slotManager.AddSlot();
                 returnState = this;
                 break;
             case UIControlEnum.NOT_PRESSED:
