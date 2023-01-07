@@ -1,9 +1,12 @@
 using System.Collections.Generic;
-public class SlotRow
+namespace Inventory.Slots
 {
-    public List<ISlot> _slots;
-    public SlotRow(List<ISlot> slots)
+    public class SlotRow
     {
-        _slots = slots;
+        public List<ISlot> _slots;
+        public SlotRow(List<ISlot> slots)
+        {
+            _slots = slots;
+        }
     }
 }

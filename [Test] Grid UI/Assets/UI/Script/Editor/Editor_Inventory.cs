@@ -1,13 +1,15 @@
 using UnityEditor;
-using UnityEditor.UI;
 
-[CustomEditor(typeof(Inventory))]
-public class Editor_Inventory : Editor
+namespace Inventory.EditorConfig
 {
-    public override void OnInspectorGUI()
+    [CustomEditor(typeof(Inventory))]
+    public class Editor_Inventory : Editor
     {
-        Inventory inventory = (Inventory)target;
+        public override void OnInspectorGUI()
+        {
+            Inventory inventory = (Inventory)target;
 
-        DrawDefaultInspector();
+            DrawDefaultInspector();
+        }
     }
 }

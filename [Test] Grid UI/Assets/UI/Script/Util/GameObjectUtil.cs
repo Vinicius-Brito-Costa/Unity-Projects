@@ -1,28 +1,33 @@
 using UnityEngine;
 
-public class GameObjectUtil
+namespace Util
 {
-    private static GameObjectUtil _instance;
-    private GameObjectUtil() { }
-
-    public static GameObjectUtil Instance()
+    public class GameObjectUtil
     {
-        if (_instance == null)
+        private static GameObjectUtil _instance;
+        private GameObjectUtil() { }
+
+        public static GameObjectUtil Instance()
         {
-            _instance = new GameObjectUtil();
-        }
-        return _instance;
-    }
-
-    public GameObject getChildGameObject(GameObject fromGameObject, string withName)
-    {
-        int childCount = fromGameObject.transform.childCount;
-        for(int index = 0; index < childCount; index++){
-            GameObject child = fromGameObject.transform.GetChild(index).gameObject;
-            if (child.name == withName){
-                return child;
+            if (_instance == null)
+            {
+                _instance = new GameObjectUtil();
             }
+            return _instance;
         }
-        return null;
+
+        public GameObject getChildGameObject(GameObject fromGameObject, string withName)
+        {
+            int childCount = fromGameObject.transform.childCount;
+            for (int index = 0; index < childCount; index++)
+            {
+                GameObject child = fromGameObject.transform.GetChild(index).gameObject;
+                if (child.name == withName)
+                {
+                    return child;
+                }
+            }
+            return null;
+        }
     }
 }

@@ -1,13 +1,15 @@
 using UnityEditor;
-using UnityEditor.UI;
-
-[CustomEditor(typeof(Slot))]
-public class Editor_Slot : Editor
+using Inventory.Slots;
+namespace Inventory.EditorConfig
 {
-    public override void OnInspectorGUI()
+    [CustomEditor(typeof(Slot))]
+    public class Editor_Slot : Editor
     {
-        Slot slot = (Slot)target;
+        public override void OnInspectorGUI()
+        {
+            Slot slot = (Slot)target;
 
-        DrawDefaultInspector();
+            DrawDefaultInspector();
+        }
     }
 }

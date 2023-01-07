@@ -1,3 +1,7 @@
-public interface IUIController {
-    UIControlEnum GetButtonPressed();
+namespace Inventory
+{
+    public interface IUIController
+    {
+        UIControlEnum GetButtonPressed();
+    }
 }

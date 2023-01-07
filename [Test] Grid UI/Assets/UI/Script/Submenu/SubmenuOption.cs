@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
 
+namespace Inventory {
 [ExecuteInEditMode]
 [RequireComponent(typeof(Image))]
 [RequireComponent(typeof(Button))]
@@ -65,10 +66,12 @@ public class SubmenuOption : MonoBehaviour, IColorized,
     public void Activate(){
         _button.interactable = true;
         _text.color = _colorSchema.GetSubmenuUnselectedTextColor();
+        gameObject.SetActive(true);
     }
     public void Deactivate(){
         _button.interactable = false;
         _text.color = _colorSchema.GetSubmenuDisabledTextColor();
+        gameObject.SetActive(false);
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -97,4 +100,5 @@ public class SubmenuOption : MonoBehaviour, IColorized,
             _text.color = _colorSchema.GetSubmenuSelectedTextColor();
         }
     }
+}
 }

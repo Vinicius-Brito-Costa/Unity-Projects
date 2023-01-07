@@ -1,3 +1,7 @@
-public interface ISubmenuOption{
-    public abstract UIAction GetOptionKey();
+namespace Inventory
+{
+    public interface ISubmenuOption
+    {
+        public abstract UIAction GetOptionKey();
+    }
 }
